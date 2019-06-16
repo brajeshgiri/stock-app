@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import socketService from './utilities/socket'
 import './App.css';
 import TableRow from './components/Row'
@@ -19,7 +18,7 @@ class App extends Component {
 
     data.forEach(([name, price], index) => {
       const indOfStock = stocksPrice.findIndex(s => s.name === name);
-      const newStock = { name, price, date: Date.now(), color: "" }
+      const newStock = { name, price: price.toFixed(2), date: Date.now(), color: "" }
       // find price increase or decrease
       if (indOfStock > -1) {
         const oldStock = stocksPrice.splice(indOfStock, 1);
@@ -28,10 +27,11 @@ class App extends Component {
       }
 
       if (stocksPrice.length + 1 > 10) {
-        stocksPrice.shift(newStock)
-      } else {
-        stocksPrice.unshift(newStock);
+        stocksPrice.pop();
       }
+
+      stocksPrice.unshift(newStock);
+
     });
     this.setState({ stocksPrice })
   }
